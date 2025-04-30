@@ -1,40 +1,38 @@
-# go-template
-go-skeleton-lido
+# callvisor
 
- ## How to use the template
- 1. Clone repository
- 2. cd root repository
- 3. make tools
- 4. make vendor
- 5. copy `sample.env` to `.env` 
- 6. docker-compose up -d
- 7. make migrate
- 8. make build
- 9. Run service ./bin/service
+**Callvisor** is an application-level proxy for Ethereum JSON-RPC, designed to bring observability, introspection, and traffic control to Web3 infrastructure — just like **Envoy** or **Linkerd**, but for smart contract interactions.
 
-## How to create migrations?
- ./bin/migrate create -ext=sql -dir=db/migrations <your table name>
+Built in Go and designed for performance, it transparently proxies `eth_call`, `eth_subscribe`, and `eth_sendRawTransaction` over WebSocket or HTTP, while decoding calldata using ABI definitions and enriching every interaction with semantic context.
 
-## How to make migrations?
-1. make migrate from terminal or 
-```
-    bin/migrate -database ${POSTGRESQL_URL} -path db/migrations up
-```
+---
 
-## Where I have to start to code my custom logic?
-* [Register handler](./internal/app/server/routes.go)
-* [Logic layer](./internal/pkg/users): /internal/pkg/your_package_name/. Just see an example with [User package](./internal/pkg/users)
-* [Env](./internal/env/env.go)
-* [Connecters](./internal/connectors) pg, logger, redis and etc...
-* For external clients you have to create folder in ./internal/clients/<your_client_name>/client.go where your_client_name - is google_client, alchemy or internal client for private network.
+## 🌐 Why Callvisor?
 
-## Docs and rules
-1. [App structure layout](./docs/structure.md)
-2. [Code style](./docs/code_style.md)
+Web3 lacks foundational tools like service meshes, API gateways, and observability layers that are common in modern cloud-native infrastructure.
 
-## Current drivers or dependencies
-1. Postgres - [pgx](https://github.com/jackc/pgx)
-2. Logger - [Logrus](https://github.com/sirupsen/logrus)
-3. Mockery [Mockery](https://github.com/vektra/mockery)
-4. Http router [gorilla_mux](github.com/gorilla/mux). Of course your can change it for example to [Gin](https://github.com/gin-gonic/gin)
-5. Env reader [Viper](https://github.com/spf13/viper)
+**Callvisor aims to close that gap**, providing:
+
+- Transparent proxying of Ethereum RPC traffic
+- Deep awareness of contract method calls and event logs
+- Real-time decoding of function arguments and log topics
+- Support for upstream node pools (e.g. Infura, Erigon, Besu, Geth)
+- Metrics, tracing, and structured logging for smart contract activity
+
+---
+
+## 🧩 Core Features
+
+- 🔌 **Transparent WebSocket proxy** (full-duplex)
+- 🔍 **ABI-aware decoding** of all JSON-RPC interactions
+- 📊 **Semantic observability layer** over smart contract calls and logs
+- 🧠 **Function signature resolution** (via ABI or selector registries)
+- 📈 **Metrics export** (Prometheus ready, coming soon)
+- ⛔ **Traffic filtering** and routing based on method, contract, chain
+- 🔐 Ready for integration in multi-tenant or L2 infrastructure
+
+---
+
+## 🚀 Quickstart
+
+```bash
+go run ./cmd/server
